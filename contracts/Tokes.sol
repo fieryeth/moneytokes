@@ -30,7 +30,6 @@ contract Tokes is ERC721 {
     event MintEtherToke(address indexed from, address indexed to, uint256 indexed tokenId, uint256 amount, uint256 expiration);
     event MintERC20Toke(address indexed from, address indexed to, uint256 indexed tokenId, address token, uint256 amount, uint256 expiration);
     event RedeemToke(address indexed to, uint256 indexed tokenId);
-    event BreakToke(address indexed creator, uint256 indexed tokenId);
 
     constructor() ERC721("Tokes", "Tokes") {}
 
