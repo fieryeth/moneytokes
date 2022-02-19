@@ -50,15 +50,16 @@ contract Tokes is ERC721 {
     function mintEtherToke(address to, uint256 expiration) public payable {
         require(msg.value > 0, "No ether sent");
 
-        _tokes[_tokesCounter.current()] = Toke({
+        tokeId = _tokesCounter.current();
+        _tokes[tokeId] = Toke({
             value: msg.value,
             expiration: expiration,
             token: address(0),
             creator: msg.sender
         });
-        _safeMint(to, _tokesCounter.current());
+        _safeMint(to, tokeId);
 
-        emit MintEtherToke(msg.sender, to, _tokesCounter.current(), msg.value, expiration);
+        emit MintEtherToke(msg.sender, to, tokeId, msg.value, expiration);
 
         _tokesCounter.increment();
     }
