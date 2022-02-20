@@ -3,11 +3,12 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-contract Tokes is ERC721 {
+contract Tokes is ERC721Enumerable {
     using Counters for Counters.Counter;
     using SafeERC20 for IERC20;
     Counters.Counter private _tokesCounter;
@@ -42,7 +43,7 @@ contract Tokes is ERC721 {
 
     }
 
-    function notExpired(uint256 tokeId) internal view returns(bool) {
+    function notExpired(uint256 tokeId) public view returns(bool) {
         uint256 expiration = _tokes[tokeId].expiration;
         if(expiration == 0 || expiration > block.timestamp) {
             return true;

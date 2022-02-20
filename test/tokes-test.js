@@ -52,7 +52,7 @@ describe("Tokes", () => {
     // Checks that owner has 10k FT before minting
     expect(await fakeToken.balanceOf(owner.address)).to.equal(10000);
 
-    // Mints a Toke with 10 ETH in it
+    // Mints a Toke with 6k FT in it
     await fakeToken.approve(tokes.address, 6000);
     await tokes.mintERC20Toke(
       fakeToken.address,
@@ -77,5 +77,46 @@ describe("Tokes", () => {
     await tokes.connect(addr1).redeem(0);
     expect(await fakeToken.balanceOf(addr1.address)).to.equal(6000);
 
+  })
+
+  it("Should deploy the Tokes contract and count tokes", async () => {
+    const [owner, addr1] = await ethers.getSigners();
+    const provider = owner.provider
+    const Tokes = await ethers.getContractFactory("Tokes");
+    const tokes = await Tokes.deploy()
+    await tokes.deployed();
+
+    const FakeToken = await ethers.getContractFactory("ERC20PresetFixedSupply");
+    const fakeToken = await FakeToken.deploy("FakeToken", "FT", 10000, owner.address)
+    await fakeToken.deployed();
+
+    // Checks that owner has 10k FT before minting
+    expect(await fakeToken.balanceOf(owner.address)).to.equal(10000);
+
+    // Mints 2 Tokes with 6k & 4k FT in it
+    await fakeToken.approve(tokes.address, 10000);
+    await tokes.mintERC20Toke(
+      fakeToken.address,
+      owner.address,
+      6000,
+      0,
+    );
+
+    await tokes.mintERC20Toke(
+      fakeToken.address,
+      owner.address,
+      4000,
+      0,
+    );
+
+    // Checks that owner has 2 tokes
+    expect(await tokes.balanceOf(owner.address)).to.equal(2);
+    expect(await tokes.tokenOfOwnerByIndex(owner.address, 0)).to.equal(0)
+
+    await tokes.redeem(0)
+
+    // Checks that owner has 1 tokes of id 1
+    expect(await tokes.balanceOf(owner.address)).to.equal(1);
+    expect(await tokes.tokenOfOwnerByIndex(owner.address, 0)).to.equal(1)
   })
 })
