@@ -34,13 +34,14 @@ contract Tokes is ERC721Enumerable {
 
     constructor() ERC721("Tokes", "Tokes") {}
 
-    function getToke(uint256 tokeId) public view returns(address owner, uint256 value, bool isEtherToke, uint256 expiration) {
+    function getToke(uint256 tokeId) public view returns(address, Toke memory, uint256) {
         require(_exists(tokeId), "This toke does not exist.");
 
-        if (_tokes[tokeId].token == address(0)) {
-            return (ownerOf(tokeId), _tokes[tokeId].value, true, _tokes[tokeId].expiration);
-        }
+        return (ownerOf(tokeId),_tokes[tokeId], tokeId);
+    }
 
+    function tokeInfoOfOwnerByIndex(address owner, uint256 id) public view returns(address, Toke memory, uint256) {
+        return getToke(tokenOfOwnerByIndex(owner, id));
     }
 
     function notExpired(uint256 tokeId) public view returns(bool) {
