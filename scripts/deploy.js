@@ -1,4 +1,8 @@
 async function main () {
+  const Multicall = await ethers.getContractFactory("Multicall");
+  const multicall = await Multicall.deploy();
+  console.log("Multicall address:", multicall.address);
+
   const Tokes = await ethers.getContractFactory('Tokes');
   console.log('Deploying Tokes...');
   const tokes = await Tokes.deploy();
